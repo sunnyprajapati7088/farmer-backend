@@ -9,17 +9,30 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = new twilio(accountSid, authToken);
 exports.signup = async (req, res) => {
-  const { name, email, password, role, phone_number } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const { name, email, password, role, phone_number, district, state } =
+    req.body;
 
   try {
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ error: "User already exists" });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user
     const newUser = new User({
       name,
       email,
       password: hashedPassword,
       role,
       phone_number,
+      district,
+      state,
     });
+
     await newUser.save();
     res
       .status(201)
@@ -30,6 +43,7 @@ exports.signup = async (req, res) => {
       .json({ error: "Failed to create user", details: err.message });
   }
 };
+
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
