@@ -45,25 +45,48 @@ exports.signup = async (req, res) => {
 };
 
 
+// exports.login = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     const user = await User.findOne({ email });
+//     if (user && (await bcrypt.compare(password, user.password))) {
+//       const token = jwt.sign(
+//         { userId: user._id, role: user.role },
+//         process.env.JWT_SECRET,
+//         { expiresIn: "1d" }
+//       );
+//       res.status(200).json({ token, userId: user._id });
+//     } else {
+//       res.status(401).json({ message: "Invalid credentials" });
+//     }
+//   } catch (err) {
+//     res.status(500).json({ error: "Login failed" });
+//   }
+// };
+
 exports.login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    // Find user by email and role
+    const user = await User.findOne({ email, role });
     if (user && (await bcrypt.compare(password, user.password))) {
+      // Generate JWT with user ID and role
       const token = jwt.sign(
         { userId: user._id, role: user.role },
         process.env.JWT_SECRET,
         { expiresIn: "1d" }
       );
-      res.status(200).json({ token, userId: user._id });
+      res.status(200).json({ token, userId: user._id, role: user.role });
     } else {
-      res.status(401).json({ message: "Invalid credentials" });
+      res.status(401).json({ message: "Invalid credentials or role" });
     }
   } catch (err) {
     res.status(500).json({ error: "Login failed" });
   }
 };
+
 
 // Send OTP for password reset
 exports.sendOtp = async (req, res) => {
@@ -118,3 +141,21 @@ exports.verifyOtpAndResetPassword = async (req, res) => {
     res.status(500).json({ error: 'Failed to reset password', details: err.message });
   }
 };
+
+// Adjust the path as necessary
+
+// Find user by ID
+exports.findUserById = async (req, res) => {
+  const userId = req.params.id; // Get the user ID from the request parameters
+  try {
+    const user = await User.findById(userId); // Use Mongoose to find the user by ID
+    if (!user) {
+      return res.status(404).json({ message: "User not found" }); // If no user found, return 404
+    }
+    res.status(200).json(user); // Return the user data if found
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message }); // Handle server error
+  }
+};
+
+
