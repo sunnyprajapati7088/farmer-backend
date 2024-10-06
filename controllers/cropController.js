@@ -25,10 +25,7 @@ exports.addCrop = async (req, res) => {
 // Get Crops Controller
 exports.getCrops = async (req, res) => {
   try {
-    const crops = await Crop.find().populate(
-      "farmer_id",
-      "name email phone_no location"
-    );
+    const crops = await Crop.find()
     res.status(200).json(crops);
   } catch (err) {
     res
