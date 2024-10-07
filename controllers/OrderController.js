@@ -83,6 +83,7 @@ exports.getAllOrders = async (req, res) => {
 // Get a single order by ID
 exports.getOrderById = async (req, res) => {
   try {
+    console.log("sdd")
     const order = await Order.findById(req.params.id).populate(
       "farmer_id buyer_id"
     );
@@ -91,6 +92,7 @@ exports.getOrderById = async (req, res) => {
     }
     return res.status(200).json(order);
   } catch (error) {
+    console.log(error)
     return res
       .status(500)
       .json({ message: "Error fetching order", error: error.message });
@@ -99,13 +101,17 @@ exports.getOrderById = async (req, res) => {
 
 // Update an order's status
 exports.updateOrderStatus = async (req, res) => {
+   console.log("jjdkh");
   try {
     const { status } = req.body;
+
+   
     const order = await Order.findByIdAndUpdate(
       req.params.id,
       { status },
       { new: true } // Return the updated document
     );
+    console.log(order)
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
@@ -113,6 +119,7 @@ exports.updateOrderStatus = async (req, res) => {
 
     return res.status(200).json(order);
   } catch (error) {
+    console.log(error)
     return res
       .status(500)
       .json({ message: "Error updating order", error: error.message });

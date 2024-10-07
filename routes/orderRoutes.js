@@ -3,6 +3,8 @@ const {
   createOrder,
   getAllOrders,
   deleteOrder,
+  getOrderById,
+  updateOrderStatus,
 } = require("../controllers/OrderController"); // Adjust the path as needed
 
 const router = express.Router();
@@ -15,5 +17,6 @@ router.get("/", getAllOrders); // You can implement this function in your contro
 
 // Route to delete an order by ID (optional)
 router.delete("/delete/:id", deleteOrder); // You can implement this function in your controller if needed
-
+router.get("/:id", getOrderById); 
+router.put("/update/:id", updateOrderStatus);
 module.exports = router;
