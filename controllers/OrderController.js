@@ -46,18 +46,18 @@ console.log(newOrder)
     const savedOrder = await newOrder.save();
 
     // Send message to the buyer
-    await twilioClient.messages.create({
-      body: `Your order for ${order_quantity} of ${crop_name} has been placed successfully. Amount: ₹${amount}.`,
-      from: twilioPhoneNumber,
-      to: buyer_phone, // Buyer phone number
-    });
+    // await twilioClient.messages.create({
+    //   body: `Your order for ${order_quantity} of ${crop_name} has been placed successfully. Amount: ₹${amount}.`,
+    //   from: twilioPhoneNumber,
+    //   to: buyer_phone, // Buyer phone number
+    // });
 
-    // Send message to the farmer
-    await twilioClient.messages.create({
-      body: `New order received! ${order_quantity} of ${crop_name} ordered by ${newOrder.buyer_name}. Amount: ₹${amount}.`,
-      from: twilioPhoneNumber,
-      to: farmer_phone, // Farmer phone number
-    });
+    // // Send message to the farmer
+    // await twilioClient.messages.create({
+    //   body: `New order received! ${order_quantity} of ${crop_name} ordered by ${newOrder.buyer_name}. Amount: ₹${amount}.`,
+    //   from: twilioPhoneNumber,
+    //   to: farmer_phone, // Farmer phone number
+    // });
 
     return res.status(201).json(savedOrder);
   } catch (error) {

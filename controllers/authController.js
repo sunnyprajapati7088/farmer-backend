@@ -32,11 +32,17 @@ exports.signup = async (req, res) => {
       district,
       state,
     });
+  
 
-    await newUser.save();
-    res
-      .status(201)
-      .json({ message: "User created successfully", userId: newUser._id });
+    if (phone_number.length == 10) {
+      await newUser.save();
+      res
+        .status(201)
+        .json({ message: "User created successfully", userId: newUser._id });
+    }
+    else {
+       res.status(201).json({ message: "incorrect phone  number" });
+    }
   } catch (err) {
     res
       .status(500)
