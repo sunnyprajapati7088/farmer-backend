@@ -25,9 +25,12 @@ exports.addCrop = async (req, res) => {
 // Get Crops Controller
 exports.getCrops = async (req, res) => {
   try {
-    const crops = await Crop.find()
+    console.log("id")
+    const crops = await Crop.find().populate("farmer_id");
+   
     res.status(200).json(crops);
   } catch (err) {
+    console.log(err)
     res
       .status(500)
       .json({ error: "Failed to fetch crops", details: err.message });
